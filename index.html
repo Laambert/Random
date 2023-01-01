@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://api.cajthaml.eu/uploads/reset_595b8cd7ad.css">
+    <style>
+        body{
+            height: 100%;
+            width: 100vw;
+
+            background-color: rgb(35, 33, 40);
+        }
+
+        .button{
+            height: 125px;
+            width: 125px;
+            background-color: rgb(250, 0, 0);
+            border-radius: 10px;
+
+            z-index: 2;
+
+            display: flex;
+
+            position: absolute;
+            border: 0;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 45px;
+        }
+
+        #slider{
+            z-index: 222;
+
+            position: relative;
+            top: 20px;
+            left: 20px;
+            
+        }
+
+
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <input type="range" min="3" max="1500" value="100" step="1" id="slider">
+    </div>
+    
+    <script>
+let button = [];
+button = document.getElementsByClassName('button');
+let body = document.getElementsByTagName("body")[0];
+let slider = document.getElementById('slider');
+let countIndex = 0;
+let deleteIndex = 0;
+
+let maxHeight = window.innerHeight - 125;
+let maxWidth = window.innerWidth - 125;
+
+let clocks = ["🕛", "🕐", "🕑", "🕒", "🕓", "🕔", "🕕", "🕖", "🕗", "🕘", "🕙", "🕚"];
+let newButton = [];
+
+for (let i = 0; i < slider.value; i++) {
+  generateButton();
+}
+buttonColor();
+
+function generateButton(){
+  let randomHeight = Math.trunc(Math.floor(Math.random() * maxHeight));
+  let randomWidth = Math.trunc(Math.floor(Math.random() * maxWidth));
+  let r = Math.floor(Math.random() * 256);
+  let g = Math.floor(Math.random() * 256);
+  let b = Math.floor(Math.random() * 256);
+  newButton.push(document.createElement("button"));//create new button
+
+  newButton[countIndex].classList.add("button");//add class to button
+  newButton[countIndex].style.backgroundColor = "rgb(" + r + ", " + g + ", " + b + ")";
+  let randomClock = Math.floor(Math.random() * clocks.length);
+  newButton[countIndex].innerText = clocks[randomClock];
+  newButton[countIndex].style.top = randomHeight + "px";//add random height
+  newButton[countIndex].style.left = randomWidth + "px";//add random width
+  
+  
+  document.body.appendChild(newButton[countIndex]);
+  countIndex++;
+}
+
+function deleteButton(){
+  let elements = document.getElementsByClassName("button");
+  elements[deleteIndex].parentNode.removeChild(elements[deleteIndex]);
+  deleteIndex++;
+}
+
+
+
+function buttonColor(){
+  button = document.getElementsByClassName('button');
+  for (let k of newButton) {
+    k.addEventListener("mouseenter", function (event) {
+      let r = Math.floor(Math.random() * 256);
+      let g = Math.floor(Math.random() * 256);
+      let b = Math.floor(Math.random() * 256);
+  
+      event.target.style.backgroundColor = "rgb(" + r + ", " + g + ", " + b + ")";
+    });
+  
+    k.addEventListener("click", function onClick(event) { 
+      let randomHeight = Math.trunc(Math.floor(Math.random() * maxHeight));
+      let randomWidth = Math.trunc(Math.floor(Math.random() * maxWidth));
+      k.style.top = randomHeight + "px";
+      k.style.left = randomWidth + "px";
+    })
+  }
+}
+
+
+slider.addEventListener('input', (event) => {
+  if(slider.value > newButton.length){
+    countIndex = 0;
+    for(let increase = 0; increase < (slider.value-newButton.length+button.length-50); increase++){
+      generateButton();
+    }
+    buttonColor();
+    
+    console.log(newButton.length);
+    console.log(slider.value);
+  }  
+  else if(slider.value < newButton.length){
+    let decrease = newButton.length-slider.value;
+    deleteIndex = 0;
+    for(decrease < button.length-slider.value; decrease--;){
+     deleteButton();//delete mi prostě nefungoval udělat, nevím proč, ztrávil jsem na tom asi 3 hodiny
+    }
+  }
+  else
+  {
+
+  }
+  
+ 
+});
+
+
+    </script>
+</body>
+</html>
